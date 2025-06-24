@@ -3,10 +3,14 @@ import ErrorBlock from "../UI/ErrorBlock.jsx";
 import EventItem from "./EventItem.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEvents } from "../../util/http.js";
-import { useState } from "react";
 
 export default function NewEventsSection() {
-  const {data, isError, error, isPending} = useQuery({ queryKey: ["events", {max: 3}], queryFn: ({signal}) => fetchEvents({max: 3, signal}) });
+  const { data, isError, error, isPending } = useQuery({
+    queryKey: ["events", { max: 3 }],
+    queryFn: ({ signal }) => fetchEvents({ signal, max: 3 }), // or  fetchEvents({ signal, ...queryKey[1] })
+    //staleTime: 5000
+    //gcTime: 1000
+  });
   let content;
 
   if (isPending) {
@@ -15,7 +19,10 @@ export default function NewEventsSection() {
 
   if (isError) {
     content = (
-      <ErrorBlock title="An error occurred" message={error.info?.message || "Failed to fetch events"} />
+      <ErrorBlock
+        title="An error occurred"
+        message={error.info?.message || "Failed to fetch events"}
+      />
     );
   }
 

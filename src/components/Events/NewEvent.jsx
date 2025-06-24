@@ -9,10 +9,10 @@ import { createNewEvent, queryClient } from "../../util/http.js";
 export default function NewEvent() {
   const navigate = useNavigate();
 
-  const { mutate, data, error, isPending, isSuccess, isError } = useMutation({
+  const { mutate, error, isPending, isError } = useMutation({
     mutationFn: createNewEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['events']})
+      queryClient.invalidateQueries({queryKey: ['events']}) //marks query data as stale so its updated on redirect
       navigate('/')
     }
   });
